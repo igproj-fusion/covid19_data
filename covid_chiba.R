@@ -5,8 +5,8 @@ library(ggthemes)
 
 Days <- 7
 
-chiba <- st_read("https://raw.githubusercontent.com/fusion0202/RScript/master/chiba_admin.geojson")
-df <- read.csv("https://raw.githubusercontent.com/fusion0202/RScript/master/covid_chiba_rev_2.csv", check.names = FALSE)
+chiba <- st_read("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/chiba_admin.geojson")
+df <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/covid_chiba_2022.csv", check.names = FALSE)
 
 cDate <- tail(colnames(df), 1)
 pDate <- tail(colnames(df), 2)[1]
@@ -22,13 +22,13 @@ df %>% select(sichoson, all_of(cDate), all_of(pDate), all_of(sDate)) %>%
          new = replace(new, new == 0, NA)) %>% 
   select(sichoson, new, total) -> dt
 
-pf <- read.csv("https://raw.githubusercontent.com/fusion0202/RScript/master/chiba_pop_20210701.csv", 
+pf <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/chiba_pop_20211201.csv", 
                check.names = FALSE)
 pop <- pf[-(2:7), c(1,2)]
 dt$total2 <- round(dt$total * 100000 / pop$T, digits = 0)
 
 map <- left_join(chiba, dt, by = c("SIKUCHOSON" = "sichoson"))
-cap <- "Data Source: https://github.com/fusion0202/RScript/blob/master/covid_chiba_rev.csv"
+cap <- "Data: https://github.com/igproj-fusion/covid19_data/blob/main/covid_chiba_2022.csv"
 
 nx <- c( 0.00,  0.02,  0.00,  0.00, -0.01,  0.00, -0.02,  0.03,  0.00,  0.00,
         -0.01,  0.00,  0.00,  0.00,  0.03,  0.015, 0.00,  0.00,  0.00,  0.00,
