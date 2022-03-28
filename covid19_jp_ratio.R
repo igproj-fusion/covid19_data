@@ -33,7 +33,7 @@ ggplot() +
   theme_map() +
   labs(title = paste0("新規感染者数 前週比（", max(df$date),"現在）"),
        caption = paste0("Source: ", URL)) +
-  theme(plot.margin= unit(c(2, 2, 2, 2), "lines"),
+  theme(plot.margin　= unit(c(2, 2, 2, 2), "lines"),
         plot.title = element_text(size = rel(2)),
         plot.caption = element_text(size = rel(1.2)),
         legend.text = element_text(size = rel(1.0)),
