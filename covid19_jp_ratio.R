@@ -25,7 +25,7 @@ border <- data.frame(xx <- c(128, 131.5, 137.5, 137.5),
                      yy <- c( 41, 41, 45, 46))
 ggplot() + 
   geom_sf(data = jp, aes(fill = ratio), size = .1) +
-  geom_path(data = border, aes(xx, yy), size = 0.1) +
+  geom_path(data = border, aes(xx, yy), size = .1) +
   scale_fill_gradient2(low = "darkgreen", mid = "white", high = "red", 
                        midpoint = 1, breaks = breaks, 
                        labels = format(breaks, digits = 3)) +
