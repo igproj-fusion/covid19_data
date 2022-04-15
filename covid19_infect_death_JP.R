@@ -22,17 +22,17 @@ read.csv(URL) %>%
   mutate(cum_c = cum_c - min(cum_c)) %>%
   mutate(cum_d = cum_d - min(cum_d)) %>%
   filter(date == max(date)) %>%
-  left_join(pop47, by=c("pref" = "PREF")) %>%
+  left_join(pop47, by = c("pref" = "PREF")) %>%
   mutate(C_perP = cum_c / POP * 100000) %>%
   mutate(D_perP = cum_d / POP * 100000) %>%
   select(date, pref, C_perP, D_perP) -> df
 
 g <- ggplot(df, aes(x = C_perP, y = D_perP))
 g <- g + geom_smooth(method = "lm", color = "lightblue", alpha = 0.3)
-g <- g + geom_point(color="blue")
+g <- g + geom_point(color = "blue")
 g <- g + geom_text_repel(aes(x = C_perP, y = D_perP, label = pref),
                          max.overlaps = 20, segment.size = 0.2)
-g <- g + scale_y_continuous(limits=c(min=0.0, max = max(df$D_perP)),
+g <- g + scale_y_continuous(limits = c(min = 0.0, max = max(df$D_perP)),
                             labels = scales::comma)
 g <- g + stat_poly_eq(formula = y ~ x,
                       aes(label = paste(stat(eq.label),
