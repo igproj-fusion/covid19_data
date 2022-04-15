@@ -45,7 +45,7 @@ g <- g + stat_poly_eq(formula = y ~ x,
 g <- g + theme_light()
 g <- g + theme(plot.margin= unit(c(2, 2, 2, 2), "lines"))
 g <- g + labs(title = "第6波の累積感染者数と累積死亡者数（人口10万人あたり）",
-              subtitle = paste0("2021-12-15〜", df$date[1]),
+              subtitle = paste0(St, "〜", df$date[1]),
               x = "Positives per 100,000 people", 
               y = "Deaths per 100,000 people",
               caption = paste("Source: ", URL))
