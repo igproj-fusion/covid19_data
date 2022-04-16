@@ -17,7 +17,7 @@ read.csv(URL) %>%
          cum_c = "各地の感染者数_累計", 
          cum_d = "各地の死者数_累計") %>%
   mutate(date = as.Date(date)) %>%
-  filter(date >= St - 1) %>%
+  filter(date %in% c(St - 1, max(date))) %>%
   group_by(pref) %>%
   mutate(cum_c = cum_c - min(cum_c)) %>%
   mutate(cum_d = cum_d - min(cum_d)) %>%
@@ -30,7 +30,7 @@ read.csv(URL) %>%
 g <- ggplot(df, aes(x = C_perP, y = D_perP))
 g <- g + geom_smooth(method = "lm", color = "lightblue", alpha = 0.3)
 g <- g + geom_point(color = "blue")
-g <- g + geom_text_repel(aes(x = C_perP, y = D_perP, label = pref),
+g <- g + geom_text_repel(aes(label = pref),
                          max.overlaps = 20, segment.size = 0.2)
 g <- g + scale_y_continuous(limits = c(min = 0.0, max = max(df$D_perP)),
                             labels = scales::comma)
