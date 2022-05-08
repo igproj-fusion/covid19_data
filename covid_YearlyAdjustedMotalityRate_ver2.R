@@ -42,17 +42,9 @@ LastD <- as.Date(tmp[nrow(tmp), 1]) + 6
 Diff <- as.numeric(tmp[2, -1]) - as.numeric(tmp[1, -1])
 Diff[is.na(Diff)] <- 0
 
-#
-# Japan & Saitama
-#
-
 JapanDeath <- Diff[1:10] + Diff[11:20]
 SaitamaDeath <- Diff[21:30] + Diff[31:40]
 
-
-#
-# Chiba
-#
 
 URL2 <- "https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/covid_chiba_deaths.csv"
 read.csv(URL2) %>%
