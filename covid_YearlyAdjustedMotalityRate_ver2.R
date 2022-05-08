@@ -14,6 +14,7 @@
 
 
 library(dplyr)
+library(tidyr)
 
 
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
