@@ -12,14 +12,9 @@
 #
 ################################################################################################
 
-library(ggplot2)
-library(ggthemes)
-library(scales)
+
 library(dplyr)
-library(tidyr)
-library(ggrepel)
-library(slider)
-library(stringr)
+
 
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   condition <- eval(substitute(condition), .data, envir)
