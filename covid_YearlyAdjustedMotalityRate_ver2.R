@@ -21,45 +21,39 @@ library(ggrepel)
 library(slider)
 library(stringr)
 
-
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   condition <- eval(substitute(condition), .data, envir)
   .data[condition, ] <- .data[condition, ] %>% mutate(...)
   .data
 }
 
+FirstD <- as.Date("2022/01/05")
 
-URL <- "https://covid19.mhlw.go.jp/public/opendata/deaths_detail_cumulative_weekly.csv"
-sht <- read.csv(URL, header = F)
+URL1 <- "https://covid19.mhlw.go.jp/public/opendata/deaths_detail_cumulative_weekly.csv"
+read.csv(URL1, header = F) %>%
+  slice(-1, -2) %>%
+  separate(V1, into = c("begin", "end"), sep = "~", remove = FALSE) %>%
+  mutate(DATE = as.Date(begin)) %>%
+  filter(DATE >= FirstD - 7) -> tmp
 
-StartD <- as.Date("2022/01/05")
-LastD <- as.Date(unlist(strsplit(sht[nrow(sht), 1], "~"))[2])
+LastD <- as.Date(unlist(strsplit(tmp[nrow(tmp), 1], "~"))[2])
 
 #
 # Japan
 #
 
-sht %>%
-  slice(-1, -2) %>%
-  separate(V1, into = c("begin", "end"), sep = "~", remove = FALSE) %>%
-  mutate(DATE = as.Date(begin)) %>%
-  filter(DATE >= StartD - 7) %>%
+tmp %>%
   select(DATE, V2:V21) %>%
-  filter(DATE %in% c(min(DATE),max(DATE))) -> ALL
+  filter(DATE %in% c(min(DATE),max(DATE))) -> JAPAN
 
-diffALL <- as.numeric(ALL[2, -1]) - as.numeric(ALL[1, -1])
-deathALL <- diffALL[1:10] + diffALL[11:20]
-
+diffJAPAN <- as.numeric(JAPAN[2, -1]) - as.numeric(JAPAN[1, -1])
+deathJAPAN <- diffJAPAN[1:10] + diffJAPAN[11:20]
 
 #
 # Saitama
 #
 
-sht %>%
-  slice(-1, -2) %>%
-  separate(V1, into = c("begin", "end"), sep = "~", remove = FALSE) %>%
-  mutate(DATE = as.Date(begin)) %>%
-  filter(DATE >= StartD - 7) %>%
+tmp %>%
   select(DATE, V222:V241) %>%
   filter(DATE %in% c(min(DATE),max(DATE))) -> SAITAMA
 
@@ -67,17 +61,15 @@ diffSAITAMA <- as.numeric(SAITAMA[2, -1]) - as.numeric(SAITAMA[1, -1])
 diffSAITAMA[is.na(diffSAITAMA)] <- 0
 deathSAITAMA <- diffSAITAMA[1:10] + diffSAITAMA[11:20]
 
-
 #
 # Chiba
 #
 
-URL <- "https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/covid_chiba_deaths.csv"
-#URL <- "/home/my/data/Chiba_pref_covid/covid_chiba_deaths.csv"
-read.csv(URL) %>%
+URL2 <- "https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/covid_chiba_deaths.csv"
+read.csv(URL2) %>%
   select(Age, Date) %>%
   mutate(Date = as.Date(Date, format = "%Y年%m月%d日")) %>%
-  filter(Date >= StartD) %>%
+  filter(Date >= FirstD) %>%
   filter(Date <= LastD) %>%
   filter(Age != is.na(Age)) %>%
   mutate_cond(Age == 100, Age = 90) %>%
@@ -89,18 +81,20 @@ read.csv(URL) %>%
 deathCHIBA <- CHIBA$n
 
 
-#
-# Calculation
-#
-
-p <- read.csv("~/data/Covid_demography/Jpop47.csv")
-popALL <- as.numeric(p[1,-1])
+p <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/Jpop47_20220101.csv")
+popJAPAN <- as.numeric(p[1,-1])
 popCHIBA <- as.numeric(p[13,-1])
 popSAITAMA <- as.numeric(p[12,-1])
 
-q <- read.csv("~/data/Covid_demography/H27ModelPop.csv", header = FALSE)
+q <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/H27ModelPop.csv", 
+              header = FALSE)
 modelPop <- q$V2 * 1000
 
-ALLD <- sum(deathALL / popALL * modelPop) / sum(modelPop) * 100000
-CHIBAD <- sum(deathCHIBA / popCHIBA * modelPop) / sum(modelPop) * 100000
-SAITAMAD <- sum(deathSAITAMA / popSAITAMA * modelPop) / sum(modelPop) * 100000
+JapanD <- sum(deathJAPAN / popJAPAN * modelPop) / sum(modelPop) * 100000
+ChibaD <- sum(deathCHIBA / popCHIBA * modelPop) / sum(modelPop) * 100000
+SaitamaD <- sum(deathSAITAMA / popSAITAMA * modelPop) / sum(modelPop) * 100000
+
+cat(paste0("\n\n", FirstD, "〜", LastD, "\n\n",
+           "千葉県　", round(ChibaD, digits = 2), "\n",
+           "全　国　 ", round(JapanD, digits = 2), "\n",
+           "埼玉県　 ", round(SaitamaD, digits = 2), "\n\n"))
