@@ -46,8 +46,8 @@ Diff[is.na(Diff)] <- 0
 # Japan & Saitama
 #
 
-deathJAPAN <- Diff[1:10] + Diff[11:20]
-deathSAITAMA <- Diff[21:30] + Diff[31:40]
+JapanDeath <- Diff[1:10] + Diff[11:20]
+SaitamaDeath <- Diff[21:30] + Diff[31:40]
 
 
 #
@@ -65,25 +65,26 @@ read.csv(URL2) %>%
   count(Age) %>%
   right_join(data.frame(Age = seq(0, 90, by = 10)), by = c("Age" = "Age")) %>%
   arrange(Age) %>%
-  mutate_cond(is.na(n), n = 0) -> CHIBA
-
-deathCHIBA <- CHIBA$n
+  mutate_cond(is.na(n), n = 0) %>%
+  select(n) -> ChibaDeath
 
 
 p <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/Jpop47_20220101.csv")
-popJAPAN <- as.numeric(p[1,-1])
-popCHIBA <- as.numeric(p[13,-1])
-popSAITAMA <- as.numeric(p[12,-1])
+JapanPop <- as.numeric(p[1,-1])
+ChibaPop <- as.numeric(p[13,-1])
+SaitamaPop <- as.numeric(p[12,-1])
 
 q <- read.csv("https://raw.githubusercontent.com/igproj-fusion/covid19_data/main/H27ModelPop.csv", 
               header = FALSE)
 modelPop <- q$V2 * 1000
 
-JapanD <- sum(deathJAPAN / popJAPAN * modelPop) / sum(modelPop) * 100000
-ChibaD <- sum(deathCHIBA / popCHIBA * modelPop) / sum(modelPop) * 100000
-SaitamaD <- sum(deathSAITAMA / popSAITAMA * modelPop) / sum(modelPop) * 100000
+JapanMR <- sum(JapanDeath / JapanPop * modelPop) / sum(modelPop) * 100000
+ChibaMR <- sum(ChibaDeath / ChibaPop * modelPop) / sum(modelPop) * 100000
+SaitamaMR <- sum(SaitamaDeath / SaitamaPop * modelPop) / sum(modelPop) * 100000
 
 cat(paste0("\n\n", FirstD, "〜", LastD, "\n\n",
-           "千葉県　", round(ChibaD, digits = 2), "\n",
-           "全　国　 ", round(JapanD, digits = 2), "\n",
-           "埼玉県　 ", round(SaitamaD, digits = 2), "\n\n"))
+           "千葉県　", round(ChibaMR, digits = 2), "\n",
+           "全　国　 ", round(JapanMR, digits = 2), "\n",
+           "埼玉県　 ", round(SaitamaMR, digits = 2), "\n\n"))
+
+
