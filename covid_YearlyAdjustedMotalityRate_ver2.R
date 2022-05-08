@@ -35,30 +35,20 @@ read.csv(URL1, header = F) %>%
   separate(V1, into = c("begin", "end"), sep = "~", remove = FALSE) %>%
   mutate(DATE = as.Date(begin)) %>%
   filter(DATE >= FirstD - 7) %>%
-  filter(DATE %in% c(min(DATE),max(DATE))) -> tmp
+  filter(DATE %in% c(min(DATE),max(DATE))) %>%
+  select(DATE, V2:V21, V222:V241) -> tmp
 
-LastD <- as.Date(unlist(strsplit(tmp[nrow(tmp), 1], "~"))[2])
-
-#
-# Japan
-#
-
-tmp %>%
-  select(DATE, V2:V21) -> JAPAN
-
-diffJAPAN <- as.numeric(JAPAN[2, -1]) - as.numeric(JAPAN[1, -1])
-deathJAPAN <- diffJAPAN[1:10] + diffJAPAN[11:20]
+LastD <- as.Date(tmp[nrow(tmp), 1]) + 6
+Diff <- as.numeric(tmp[2, -1]) - as.numeric(tmp[1, -1])
+Diff[is.na(Diff)] <- 0
 
 #
-# Saitama
+# Japan & Saitama
 #
 
-tmp %>%
-  select(DATE, V222:V241) -> SAITAMA
+deathJAPAN <- Diff[1:10] + Diff[11:20]
+deathSAITAMA <- Diff[21:30] + Diff[31:40]
 
-diffSAITAMA <- as.numeric(SAITAMA[2, -1]) - as.numeric(SAITAMA[1, -1])
-diffSAITAMA[is.na(diffSAITAMA)] <- 0
-deathSAITAMA <- diffSAITAMA[1:10] + diffSAITAMA[11:20]
 
 #
 # Chiba
@@ -97,5 +87,3 @@ cat(paste0("\n\n", FirstD, "〜", LastD, "\n\n",
            "千葉県　", round(ChibaD, digits = 2), "\n",
            "全　国　 ", round(JapanD, digits = 2), "\n",
            "埼玉県　 ", round(SaitamaD, digits = 2), "\n\n"))
-
-
