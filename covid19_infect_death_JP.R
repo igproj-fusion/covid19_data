@@ -1,3 +1,4 @@
+
 library(ggplot2)
 library(ggthemes)
 library(scales)
@@ -14,29 +15,16 @@ St <- as.Date("2021-12-15")
 read.csv(URL) %>%
   select(date = "日付", pref = "都道府県名", cump = "各地の感染者数_累計", cumd = "各地の死者数_累計") %>%
   mutate(date = as.Date(date)) %>%
-  filter(date >= St) %>%
+  filter(date >= St - 1) %>%
   group_by(pref) %>%
   mutate(cump = cump - min(cump)) %>%
   mutate(cumd = cumd - min(cumd)) %>%
-  mutate(perP = 0) %>%
-  mutate(perD = 0) -> df
+  filter(date == max(date)) %>%
+  left_join(pop47, by=c("pref" = "PREF")) %>%
+  mutate(perP = cump / POP *100000) %>%
+  mutate(perD = cumd / POP *100000) -> df
 
-
-for(i in 1:47){
-  df$perP[df$pref == pop47$PREF[i]] <- df$cump[df$pref == pop47$PREF[i]] / pop47$POP[i] *100000
-  df$perD[df$pref == pop47$PREF[i]] <- df$cumd[df$pref == pop47$PREF[i]] / pop47$POP[i] *100000
-}
-
-last <- data.frame(df[df$date == max(df$date),])
-last2 <- left_join(last, pop47, by　=　c("pref" = "PREF"))
-
-cor(last2$perP, last2$perD)^2
-
-cor(last2$cump, last2$POP)
-cor.test(last2$perP, last2$perD)
-
-
-g <- ggplot(last2, aes(x = perP, y = perD))
+g <- ggplot(df, aes(x = perP, y = perD))
 g <- g + geom_smooth(method = "lm", color = "lightblue", alpha = 0.3)
 g <- g + geom_point(color="blue")
 g <- g + geom_text_repel(aes(x = perP, y = perD, label = pref),
@@ -44,20 +32,14 @@ g <- g + geom_text_repel(aes(x = perP, y = perD, label = pref),
 g <- g + scale_y_continuous(breaks = c(0,  5.0, 10, 15.0, 20.0, 25.0),
                             limits=c(min = 0.0, max = 25.0),
                             labels = scales::comma)
-
 g <- g + stat_poly_eq(formula = y ~ x,
                       aes(label = paste(stat(eq.label),
                                         stat(rr.label),
                                         stat(adj.rr.label),
-                                        #stat(f.value.label),
-                                        #stat(p.value.label),
-                                        #stat(AIC.label),
-                                        #stat(BIC.label),
                                         sep = "*\", \"*")),
                       eq.with.lhs = "italic(hat(y))~`=`~",
                       eq.x.rhs = "~italic(z)",
                       parse = TRUE, size = 5)
-#g <- g + scale_x_log10() + scale_y_log10()
 g <- g + theme_light()
 g <- g + theme(plot.margin= unit(c(2, 2, 2, 2), "lines"))
 g <- g + labs(title = "第6波以降の累積感染者数と累積死亡者数（人口10万人あたり）",
