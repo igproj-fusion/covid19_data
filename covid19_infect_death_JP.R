@@ -28,7 +28,7 @@ for(i in 1:47){
 }
 
 last <- data.frame(df[df$date == max(df$date),])
-last2 <- left_join(last, pop47, by=c("pref" = "PREF"))
+last2 <- left_join(last, pop47, by　=　c("pref" = "PREF"))
 
 cor(last2$perP, last2$perD)^2
 
