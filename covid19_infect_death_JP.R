@@ -30,7 +30,7 @@ g <- g + geom_point(color="blue")
 g <- g + geom_text_repel(aes(x = perP, y = perD, label = pref),
                          max.overlaps=20, segment.size = 0.2)
 g <- g + scale_y_continuous(breaks = c(0,  5.0, 10, 15.0, 20.0, 25.0),
-                            limits=c(min = 0.0, max = 25.0),
+                            limits = c(min = 0.0, max = 25.0),
                             labels = scales::comma)
 g <- g + stat_poly_eq(formula = y ~ x,
                       aes(label = paste(stat(eq.label),
