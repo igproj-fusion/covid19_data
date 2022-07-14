@@ -1799,10 +1799,13 @@ No,Age,Sex,Date,Reported,Area,Rem,URL
 1796,70,M,2022年07月01日,2022年07月04日,柏市,,https://www.city.kashiwa.lg.jp/koho/pressrelease/r4houdou/7gatsu/r4070402.html
 1797,70,F,2022年06月28日,2022年07月05日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0705ncov3.pdf
 1798,70,F,2022年07月03日,2022年07月05日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0705ncov3.pdf
-1799,80,M,2022年07月03日,2022年07月05日,千葉市,,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220705_cov_2.html
-1800,80,F,2022年07月04日,2022年07月05日,千葉市,,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220705_cov_2.html
+1799,80,M,2022年07月03日,2022年07月05日,千葉市,252,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220705_cov_2.html
+1800,80,F,2022年07月04日,2022年07月05日,千葉市,253,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220705_cov_2.html
 1801,80,F,2022年07月02日,2022年07月07日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0707ncov3.pdf
 1802,70,M,2022年07月05日,2022年07月07日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0707ncov3.pdf
 1803,60,M,2022年06月29日,2022年07月08日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0708ncov3.pdf
-1804,70,F,2022年07月05日,2022年07月08日,千葉市,,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220708_cov_2.html
+1804,70,F,2022年07月05日,2022年07月08日,千葉市,254,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220708_cov_2.html
 1805,80,F,2022年07月06日,2022年07月08日,柏市,,https://www.city.kashiwa.lg.jp/koho/pressrelease/r4houdou/7gatsu/r4070803.html
+1806,90,F,2022年07月10日,2022年07月13日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0713ncov3.pdf
+1807,80,M,2022年07月10日,2022年07月13日,,,https://www.pref.chiba.lg.jp/shippei/press/2022/documents/0713ncov3.pdf
+1808,80,M,2022年07月11日,2022年07月13日,千葉市,255,https://www.city.chiba.jp/hokenfukushi/iryoeisei/seisaku/covid-19/220713_cov_3.html
